@@ -1,5 +1,5 @@
 //
-//  QuestionsModel.swift
+//  QuizModel.swift
 //  Buzzquiz
 //
 //  Created by Jonathan Huston on 12/24/20.
@@ -26,13 +26,17 @@ struct Question {
     let answers: [Answer]
 }
 
-struct QuestionsModel {
-    let quizName: String
+struct QuizModel {
+    var quizName = "Laika"
 }
 
-extension QuestionsModel {
+extension QuizModel {
     var quizQuestion: String {
-        "Which Laika character are you?"
+        if quizName == "Laika" {
+            return "Which Laika character are you?"
+        } else {
+            return "What Knives Out character are you?"
+        }
     }
     
     var characters: [Character] {

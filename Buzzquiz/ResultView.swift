@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ResultView {
+    @ObservedObject var quizzes: Quizzes
     @Binding var activeView: ActiveView
 }
 
@@ -34,6 +35,6 @@ extension ResultView: View {
 
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultView(activeView: .constant(.result))
+        ResultView(quizzes: Quizzes(), activeView: .constant(.result))
     }
 }

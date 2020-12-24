@@ -8,16 +8,15 @@
 import SwiftUI
 
 struct QuestionsView {
-    @StateObject var quiz = QuestionsViewSupport()
+    @ObservedObject var quizzes: Quizzes
     
     @Binding var activeView: ActiveView
-    @Binding var quizName: String
 }
 
 extension QuestionsView: View {
     var body: some View {
         VStack(spacing: 20) {
-            Text(quiz.data.quizQuestion)
+            Text(quizzes.data.quizQuestion)
                 .font(.title)
                 .foregroundColor(.accentColor)
             
@@ -30,6 +29,6 @@ extension QuestionsView: View {
 
 struct QuestionsView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionsView(activeView: .constant(.questions), quizName: .constant("Laika"))
+        QuestionsView(quizzes: Quizzes(), activeView: .constant(.questions))
     }
 }
