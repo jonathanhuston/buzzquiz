@@ -1,5 +1,5 @@
 //
-//  QuizModel.swift
+//  QuestionsModel.swift
 //  Buzzquiz
 //
 //  Created by Jonathan Huston on 12/24/20.
