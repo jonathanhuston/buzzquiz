@@ -9,7 +9,6 @@ import SwiftUI
 
 struct QuestionsView {
     @ObservedObject var quizzes: Quizzes
-    
     @Binding var activeView: ActiveView
 }
 

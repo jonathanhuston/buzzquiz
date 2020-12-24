@@ -17,6 +17,7 @@ extension ResultView: View {
         VStack {
             Image("Baymax")
                 .padding()
+            
             HStack {
                 Button("Different quiz?") {
                     activeView = .chooseQuiz

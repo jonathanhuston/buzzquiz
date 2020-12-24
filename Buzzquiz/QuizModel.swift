@@ -27,7 +27,7 @@ struct Question {
 }
 
 struct QuizModel {
-    var quizName = "Laika"
+    var quizName = ""
 }
 
 extension QuizModel {
