@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ChooseQuizView {
-    @EnvironmentObject var allQuizzes: AllQuizzes
+    @StateObject var quizzes = Quizzes()
 
     @Binding var activeView: ActiveView
-    @Binding var quiz: String
+    @Binding var quizName: String
 }
 
 extension ChooseQuizView: View {
@@ -22,8 +22,8 @@ extension ChooseQuizView: View {
                 .foregroundColor(.accentColor)
                 .padding()
             
-            Picker(selection: $quiz, label: Text("")) {
-                ForEach(allQuizzes.names, id:\.self) { name in
+            Picker(selection: $quizName, label: Text("")) {
+                ForEach(quizzes.names, id:\.self) { name in
                     Text(name).tag(name)
                 }
             }
@@ -46,6 +46,6 @@ extension ChooseQuizView: View {
 
 struct ChooseQuizView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseQuizView(activeView: .constant(.chooseQuiz), quiz: .constant(""))
+        ChooseQuizView(activeView: .constant(.chooseQuiz), quizName: .constant("Laika"))
     }
 }

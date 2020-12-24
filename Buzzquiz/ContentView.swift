@@ -16,16 +16,16 @@ enum ActiveView {
 
 struct ContentView {
     @State var activeView: ActiveView = .chooseQuiz
-    @State var quiz = ""
+    @State var quizName = ""
 }
 
 extension ContentView: View {
     var body: some View {
         switch activeView {
         case .chooseQuiz:
-            ChooseQuizView(activeView: $activeView, quiz: $quiz)
+            ChooseQuizView(activeView: $activeView, quizName: $quizName)
         case .questions:
-            QuestionsView(activeView: $activeView, quiz: $quiz)
+            QuestionsView(activeView: $activeView, quizName: $quizName)
         case .result:
             ResultView(activeView: $activeView)
         case .quit:

@@ -26,8 +26,20 @@ struct Question {
     let answers: [Answer]
 }
 
-struct Model {
+struct QuestionsModel {
     let quizName: String
-    let characters: [Character]
-    let questions: [Question]
+}
+
+extension QuestionsModel {
+    var quizQuestion: String {
+        "Which Laika character are you?"
+    }
+    
+    var characters: [Character] {
+        []
+    }
+    
+    var questions: [Question] {
+        []
+    }
 }

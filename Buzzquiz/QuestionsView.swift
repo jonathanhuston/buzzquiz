@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct QuestionsView {
+    @StateObject var quiz = QuestionsViewSupport()
+    
     @Binding var activeView: ActiveView
-    @Binding var quiz: String
+    @Binding var quizName: String
 }
 
 extension QuestionsView: View {
     var body: some View {
         VStack(spacing: 20) {
-            Text(quiz)
+            Text(quiz.data.quizQuestion)
+                .font(.title)
+                .foregroundColor(.accentColor)
             
             Button("Done?") {
                 activeView = .result
@@ -26,6 +30,6 @@ extension QuestionsView: View {
 
 struct QuestionsView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionsView(activeView: .constant(.questions), quiz: .constant(""))
+        QuestionsView(activeView: .constant(.questions), quizName: .constant("Laika"))
     }
 }
