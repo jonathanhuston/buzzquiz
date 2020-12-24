@@ -11,7 +11,7 @@ struct ChooseQuizView {
     @ObservedObject var quizzes: Quizzes
     @Binding var activeView: ActiveView
     
-    @State var quizName = ""
+    @State var quizIndex = 0
 }
 
 extension ChooseQuizView: View {
@@ -22,9 +22,9 @@ extension ChooseQuizView: View {
                 .foregroundColor(.accentColor)
                 .padding()
             
-            Picker(selection: $quizName, label: Text("")) {
-                ForEach(quizzes.names, id:\.self) { name in
-                    Text(name).tag(name)
+            Picker(selection: $quizIndex, label: Text("")) {
+                ForEach(quizzes.names.indices) { i in
+                    Text(quizzes.names[i]).tag(i)
                 }
             }
             .padding()
@@ -32,7 +32,7 @@ extension ChooseQuizView: View {
             
             HStack {
                 Button("Play") {
-                    quizzes.data.quizName = quizName
+                    quizzes.data.quizName = quizzes.names[quizIndex]
                     activeView = .questions
                 }
                 .padding()
