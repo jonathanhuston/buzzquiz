@@ -9,5 +9,5 @@ import SwiftUI
 
 class Quizzes: ObservableObject {
     @Published var names = getQuizNames()
-    @Published var data = QuizModel()
+    @Published var data = Quiz()
 }

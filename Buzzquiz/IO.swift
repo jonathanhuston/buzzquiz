@@ -7,10 +7,15 @@
 
 import Foundation
 
+let GAME_DATA_PATH = "Buzzquiz"
+let DESCRIPTIONS_FILE = "descriptions.csv"
+let QUESTIONS_FILE = "questions.csv"
+
+let fileManager = FileManager.default
+let home = fileManager.homeDirectoryForCurrentUser
+
 func getQuizNames() -> [String] {
-    let fileManager = FileManager.default
-    let home = fileManager.homeDirectoryForCurrentUser
-    let buzzquizUrl = home.appendingPathComponent("Buzzquiz")
+    let buzzquizUrl = home.appendingPathComponent(GAME_DATA_PATH)
     
     do {
         let contents = try fileManager.contentsOfDirectory(at: buzzquizUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
@@ -18,4 +23,25 @@ func getQuizNames() -> [String] {
       } catch {
         return []
       }
+}
+
+func loadCSV(at url: URL) throws -> String {
+    let s = try String(contentsOf: url)
+    return s
+}
+
+func loadQuizData(quizName: String) -> Quiz {
+    let quizURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/")
+    let descriptionURL = quizURL.appendingPathComponent(DESCRIPTIONS_FILE)
+    let questionsURL = quizURL.appendingPathComponent(QUESTIONS_FILE)
+
+    let descriptions = try! loadCSV(at: descriptionURL)
+    let questions = try! loadCSV(at: questionsURL)
+    
+    print(descriptions)
+    print(questions)
+    
+    let quiz = Quiz(quizName: quizName, quizTitle: "Which \(quizName) character are you?")
+    
+    return quiz
 }

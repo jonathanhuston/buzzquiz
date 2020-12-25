@@ -32,10 +32,11 @@ extension ChooseQuizView: View {
             
             HStack {
                 Button("Play") {
-                    quizzes.data.quizName = quizzes.names[quizIndex]
+                    quizzes.data = loadQuizData(quizName: quizzes.names[quizIndex])
                     activeView = .questions
                 }
                 .padding()
+                
                 Button("Quit") {
                     activeView = .quit
                 }

@@ -15,7 +15,7 @@ struct QuestionsView {
 extension QuestionsView: View {
     var body: some View {
         VStack(spacing: 20) {
-            Text(quizzes.data.quizQuestion)
+            Text(quizzes.data.quizTitle)
                 .font(.title)
                 .foregroundColor(.accentColor)
             
