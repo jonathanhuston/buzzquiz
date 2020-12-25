@@ -8,17 +8,18 @@
 import Foundation
 
 typealias CharacterName = String
+typealias Score = Int
 
 struct Character {
     let name: CharacterName
     let color: String
     let description: String
-    var score = 0
+    var score: Score = 0
 }
 
 struct Answer {
     let answer: String
-    let scores: [CharacterName: Int]
+    let scores: [CharacterName: Score]
 }
 
 struct Question {

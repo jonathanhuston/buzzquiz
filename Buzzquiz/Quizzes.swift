@@ -8,6 +8,6 @@
 import SwiftUI
 
 class Quizzes: ObservableObject {
-    @Published var names = ["Laika", "Knives Out"]
+    @Published var names = getQuizNames()
     @Published var data = QuizModel()
 }
