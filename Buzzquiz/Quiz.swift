@@ -1,5 +1,5 @@
 //
-//  QuizModel.swift
+//  Quiz.swift
 //  Buzzquiz
 //
 //  Created by Jonathan Huston on 12/24/20.
@@ -10,26 +10,26 @@ import Foundation
 typealias CharacterName = String
 typealias Score = Int
 
-struct Character {
-    var name: CharacterName
-    var color: String
-    var description: String
-    var score: Score = 0
+struct QuizCharacter {
+    let name: CharacterName
+    let color: String
+    let description: String
+    let score: Score
 }
 
 struct Answer {
-    var answer: String
-    var scores: [CharacterName: Score]
+    let answer: String
+    let scores: [CharacterName: Score]
 }
 
 struct Question {
-    var question: String
-    var answers: [Answer]
+    let question: String
+    let answers: [Answer]
 }
 
 struct Quiz {
     var quizName = ""
     var quizTitle = ""
-    var characters = [Character]()
+    var characters = [QuizCharacter]()
     var questions = [Question]()
 }

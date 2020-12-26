@@ -15,7 +15,15 @@ struct ResultView {
 extension ResultView: View {
     var body: some View {
         VStack {
-            Image("Baymax")
+            Image(quizzes.data.characters[0].name)
+                .padding()
+            
+            Text(quizzes.data.characters[0].name)
+                .font(.title)
+                .foregroundColor(.accentColor)
+                .padding()
+            
+            Text(quizzes.data.characters[0].description)
                 .padding()
             
             HStack {

@@ -8,7 +8,7 @@
 import Foundation
 
 let GAME_DATA_PATH = "Buzzquiz"
-let DESCRIPTIONS_FILE = "descriptions.csv"
+let CHARACTERS_FILE = "characters.csv"
 let QUESTIONS_FILE = "questions.csv"
 
 let fileManager = FileManager.default
@@ -25,23 +25,52 @@ func getQuizNames() -> [String] {
       }
 }
 
-func loadCSV(at url: URL) throws -> String {
-    let s = try String(contentsOf: url)
-    return s
+func loadCSV(at url: URL) -> String {
+    do {
+        let contents = try String(contentsOf: url)
+        return contents
+    } catch {
+        return ""
+    }
+}
+
+func loadCharacters(at url: URL) -> [QuizCharacter] {
+    var characters = [QuizCharacter]()
+    let contents = loadCSV(at: url)
+    let rows = contents.split(separator: "\r\n")
+        
+    for row in rows {
+        let columns = row.split(separator: ",")
+        print(columns)
+        let character = QuizCharacter(name: String(columns[0]),
+                                      color: String(columns[1]),
+                                      description: String(columns[2]),
+                                      score: 0)
+        characters.append(character)
+    }
+    
+    return characters
+}
+
+func loadQuestions(at url: URL) -> (String, [Question]) {
+    let quizTitle = ""
+    let questions = [Question]()
+    
+    return (quizTitle, questions)
 }
 
 func loadQuizData(quizName: String) -> Quiz {
     let quizURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/")
-    let descriptionURL = quizURL.appendingPathComponent(DESCRIPTIONS_FILE)
+    let charactersURL = quizURL.appendingPathComponent(CHARACTERS_FILE)
     let questionsURL = quizURL.appendingPathComponent(QUESTIONS_FILE)
 
-    let descriptions = try! loadCSV(at: descriptionURL)
-    let questions = try! loadCSV(at: questionsURL)
+    let characters = loadCharacters(at: charactersURL)
+    let (quizTitle, questions) = loadQuestions(at: questionsURL)
     
-    print(descriptions)
-    print(questions)
-    
-    let quiz = Quiz(quizName: quizName, quizTitle: "Which \(quizName) character are you?")
+    let quiz = Quiz(quizName: quizName,
+                    quizTitle: quizTitle,
+                    characters: characters,
+                    questions: questions)
     
     return quiz
 }
