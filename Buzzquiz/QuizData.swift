@@ -1,5 +1,5 @@
 //
-//  Quizzes.swift
+//  QuizData.swift
 //  Buzzquiz
 //
 //  Created by Jonathan Huston on 12/24/20.
@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-class Quizzes: ObservableObject {
+class QuizData: ObservableObject {
     @Published var names = getQuizNames()
-    @Published var data = Quiz()
+    @Published var quiz = Quiz()
+    @Published var bestMatch = 0
 }

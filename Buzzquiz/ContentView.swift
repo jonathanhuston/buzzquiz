@@ -15,7 +15,7 @@ enum ActiveView {
 }
 
 struct ContentView {
-    @StateObject var quizzes = Quizzes()
+    @StateObject var quizzes = QuizData()
     @State var activeView: ActiveView = .chooseQuiz
 }
 

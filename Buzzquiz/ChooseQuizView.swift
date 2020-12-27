@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChooseQuizView {
-    @ObservedObject var quizzes: Quizzes
+    @ObservedObject var quizzes: QuizData
     @Binding var activeView: ActiveView
     
     @State var quizIndex = 0
@@ -32,7 +32,7 @@ extension ChooseQuizView: View {
             
             HStack {
                 Button("Play") {
-                    quizzes.data = loadQuizData(quizName: quizzes.names[quizIndex])
+                    quizzes.quiz = loadQuizData(quizName: quizzes.names[quizIndex])
                     activeView = .questions
                 }
                 .padding()
@@ -48,6 +48,6 @@ extension ChooseQuizView: View {
 
 struct ChooseQuizView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseQuizView(quizzes: Quizzes(), activeView: .constant(.chooseQuiz))
+        ChooseQuizView(quizzes: QuizData(), activeView: .constant(.chooseQuiz))
     }
 }

@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct ResultView {
-    @ObservedObject var quizzes: Quizzes
+    @ObservedObject var quizzes: QuizData
     @Binding var activeView: ActiveView
 }
 
 extension ResultView: View {
     var body: some View {
-        VStack {
-            Image(quizzes.data.characters[0].name)
-                .padding()
+        VStack(spacing: 20) {
+            Image(quizzes.quiz.characters[quizzes.bestMatch].name)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
             
-            Text(quizzes.data.characters[0].name)
+            Text(quizzes.quiz.characters[quizzes.bestMatch].name)
                 .font(.title)
-                .foregroundColor(.accentColor)
-                .padding()
+                .foregroundColor(colorKeys[quizzes.quiz.characters[quizzes.bestMatch].color])
             
-            Text(quizzes.data.characters[0].description)
+            Text(quizzes.quiz.characters[quizzes.bestMatch].description)
                 .padding()
             
             HStack {
@@ -44,6 +44,6 @@ extension ResultView: View {
 
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultView(quizzes: Quizzes(), activeView: .constant(.result))
+        ResultView(quizzes: QuizData(), activeView: .constant(.result))
     }
 }

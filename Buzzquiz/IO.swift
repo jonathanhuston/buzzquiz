@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 let GAME_DATA_PATH = "Buzzquiz"
 let CHARACTERS_FILE = "characters.csv"
@@ -13,6 +14,18 @@ let QUESTIONS_FILE = "questions.csv"
 
 let fileManager = FileManager.default
 let home = fileManager.homeDirectoryForCurrentUser
+
+let colorKeys = [
+    "blue": Color.blue,
+    "magenta": Color.purple,
+    "green": Color.green,
+    "red": Color.red,
+    "black": Color.primary,
+    "white": Color.secondary,
+    "cyan": Color.gray,
+    "orange": Color.orange,
+    "pink": Color.pink
+]
 
 func getQuizNames() -> [String] {
     let buzzquizUrl = home.appendingPathComponent(GAME_DATA_PATH)
@@ -25,26 +38,43 @@ func getQuizNames() -> [String] {
       }
 }
 
-func loadCSV(at url: URL) -> String {
+func loadCSV(at url: URL) -> [String] {
     do {
-        let contents = try String(contentsOf: url)
-        return contents
+        let contents = try String(contentsOf: url).split(separator: "\r\n")
+        return contents.map { String($0) }
     } catch {
-        return ""
+        return [""]
     }
+}
+
+func getDescription(from row: String) -> String {
+    let i = row.index(row.firstIndex(of: ",") ?? row.startIndex, offsetBy: 1)
+    let remainingRow = String(row[i...])
+    let j = remainingRow.index(remainingRow.firstIndex(of: ",") ?? remainingRow.startIndex, offsetBy: 1)
+    let description = String(remainingRow[j...])
+    
+    return description.trimmingCharacters(in: ["\""]).replacingOccurrences(of: "\"\"", with: "\"")
+}
+
+func getCharacterFields(in row: String) -> (CharacterName, String, String) {
+    let columns = row.split(separator: ",")
+    
+    let name = String(columns[0])
+    let color = String(columns[1])
+    let description = getDescription(from: row)
+    
+    return (name, color, description)
 }
 
 func loadCharacters(at url: URL) -> [QuizCharacter] {
     var characters = [QuizCharacter]()
     let contents = loadCSV(at: url)
-    let rows = contents.split(separator: "\r\n")
         
-    for row in rows {
-        let columns = row.split(separator: ",")
-        print(columns)
-        let character = QuizCharacter(name: String(columns[0]),
-                                      color: String(columns[1]),
-                                      description: String(columns[2]),
+    for row in contents {
+        let (name, color, description) = getCharacterFields(in: row)
+        let character = QuizCharacter(name: name,
+                                      color: color,
+                                      description: description,
                                       score: 0)
         characters.append(character)
     }
