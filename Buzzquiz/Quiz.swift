@@ -18,12 +18,12 @@ struct QuizCharacter {
 }
 
 struct Answer {
-    let answer: String
+    let a: String
     let scores: [CharacterName: Score]
 }
 
 struct Question {
-    let question: String
+    let q: String
     let answers: [Answer]
 }
 

@@ -15,7 +15,7 @@ struct ResultView {
 extension ResultView: View {
     var body: some View {
         VStack(spacing: 20) {
-            Image(quizzes.quiz.characters[quizzes.bestMatch].name)
+            Image(quizzes.quiz.characters[quizzes.bestMatch].name.replacingOccurrences(of: " ", with: "-"))
                 .resizable()
                 .aspectRatio(contentMode: .fit)
             

@@ -27,6 +27,12 @@ let colorKeys = [
     "pink": Color.pink
 ]
 
+extension String {
+    func trimQuotes () -> String {
+        return self.trimmingCharacters(in: ["\""]).replacingOccurrences(of: "\"\"", with: "\"")
+    }
+}
+
 func getQuizNames() -> [String] {
     let buzzquizUrl = home.appendingPathComponent(GAME_DATA_PATH)
     
@@ -53,7 +59,7 @@ func getDescription(from row: String) -> String {
     let j = remainingRow.index(remainingRow.firstIndex(of: ",") ?? remainingRow.startIndex, offsetBy: 1)
     let description = String(remainingRow[j...])
     
-    return description.trimmingCharacters(in: ["\""]).replacingOccurrences(of: "\"\"", with: "\"")
+    return description.trimQuotes()
 }
 
 func getCharacterFields(in row: String) -> (CharacterName, String, String) {
@@ -82,9 +88,65 @@ func loadCharacters(at url: URL) -> [QuizCharacter] {
     return characters
 }
 
-func loadQuestions(at url: URL) -> (String, [Question]) {
-    let quizTitle = ""
-    let questions = [Question]()
+func getAnswer(for characters: [QuizCharacter], from content: [String.SubSequence]) -> (String, [CharacterName: Score]) {
+    var scores = [CharacterName: Score]()
+    
+    let answer = String(content[0])
+    
+    for i in 1..<content.count {
+        scores[characters[i-1].name] = Int(content[i])
+    }
+    
+    return (answer, scores)
+}
+
+func getFirstColumn(from row: String) -> String {
+    return String((row.split(separator: ","))[0]).trimQuotes()
+}
+
+func getQuestion(for characters: [QuizCharacter], from contents: [String], startingAt firstRow: Int) -> (String, [Answer], Int) {
+    var answers = [Answer]()
+    
+    let q = getFirstColumn(from: contents[firstRow])
+    
+    var currentRow = firstRow + 2
+    
+    while currentRow < contents.count {
+        let content = contents[currentRow].split(separator: ",")
+        
+        if content.isEmpty {
+            break
+        }
+        
+        let (a, scores) = getAnswer(for: characters, from: content)
+        let answer = Answer(a: a, scores: scores)
+        
+        answers.append(answer)
+        currentRow += 1
+    }
+    
+    
+    return (q, answers, currentRow + 1)
+}
+
+func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
+    var questions = [Question]()
+    let contents = loadCSV(at: url)
+    
+    let quizTitle = getFirstColumn(from: contents[0])
+    print(quizTitle)
+    
+    var currentRow = 2
+
+    while currentRow < contents.count {
+        let (q, answers, nextRow) = getQuestion(for: characters, from: contents, startingAt: currentRow)
+        
+        let question = Question(q: q, answers: answers)
+        print(q)
+        print(answers)
+        questions.append(question)
+        currentRow = nextRow
+    }
     
     return (quizTitle, questions)
 }
@@ -95,7 +157,7 @@ func loadQuizData(quizName: String) -> Quiz {
     let questionsURL = quizURL.appendingPathComponent(QUESTIONS_FILE)
 
     let characters = loadCharacters(at: charactersURL)
-    let (quizTitle, questions) = loadQuestions(at: questionsURL)
+    let (quizTitle, questions) = loadQuestions(for: characters, at: questionsURL)
     
     let quiz = Quiz(quizName: quizName,
                     quizTitle: quizTitle,

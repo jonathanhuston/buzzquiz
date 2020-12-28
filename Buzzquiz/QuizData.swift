@@ -10,5 +10,5 @@ import SwiftUI
 class QuizData: ObservableObject {
     @Published var names = getQuizNames()
     @Published var quiz = Quiz()
-    @Published var bestMatch = 0
+    @Published var bestMatch = 2
 }
