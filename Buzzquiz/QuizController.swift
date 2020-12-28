@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-class QuizData: ObservableObject {
+class QuizController: ObservableObject {
     @Published var names = getQuizNames()
     @Published var quiz = Quiz()
-    @Published var bestMatch = 2
+    @Published var bestMatch = QuizCharacter()
 }
-

@@ -11,20 +11,20 @@ typealias CharacterName = String
 typealias Score = Int
 
 struct QuizCharacter {
-    let name: CharacterName
-    let color: String
-    let description: String
-    let score: Score
+    var name: CharacterName = ""
+    var color = ""
+    var description = ""
+    var score: Score = 0
 }
 
 struct Answer: Hashable {
     let a: String
-    let scores: [CharacterName: Score]
+    var scores: [CharacterName: Score]
 }
 
 struct Question {
     let q: String
-    let answers: [Answer]
+    var answers: [Answer]
 }
 
 struct Quiz {

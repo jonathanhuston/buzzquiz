@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChooseQuizView {
-    @ObservedObject var quizzes: QuizData
+    @ObservedObject var quizzes: QuizController
     @Binding var activeView: ActiveView
     
     @State private var quizIndex = 0
@@ -48,6 +48,6 @@ extension ChooseQuizView: View {
 
 struct ChooseQuizView_Previews: PreviewProvider {
     static var previews: some View {
-        ChooseQuizView(quizzes: QuizData(), activeView: .constant(.chooseQuiz))
+        ChooseQuizView(quizzes: QuizController(), activeView: .constant(.chooseQuiz))
     }
 }
