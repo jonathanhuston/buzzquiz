@@ -13,6 +13,8 @@ struct QuestionsView {
     
     @State private var counter = 0
     @State private var selectedAnswer = ""
+    
+//    let columns = [GridItem(.fixed(50)), GridItem(.fixed(50))]
 }
 
 extension QuestionsView: View {
@@ -26,8 +28,20 @@ extension QuestionsView: View {
                 .font(.title2)
             
             Picker(selection: $selectedAnswer, label: Text("")) {
-                ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
-                    Text(answer.a).tag(answer.a)
+                if quizzes.quiz.questions[counter].answers[0].a.contains(".jpg") {
+//                    LazyVGrid(columns: columns) {
+                        ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
+                                let image = answer.a.split(separator: ".")[0]
+                                Image(String(image))
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .tag(answer.a)
+                        }
+//                    }
+                } else {
+                    ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
+                        Text(answer.a).tag(answer.a)
+                    }
                 }
             }
             .padding()
