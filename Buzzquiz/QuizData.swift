@@ -12,3 +12,4 @@ class QuizData: ObservableObject {
     @Published var quiz = Quiz()
     @Published var bestMatch = 2
 }
+

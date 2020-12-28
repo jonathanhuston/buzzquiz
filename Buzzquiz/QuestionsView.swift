@@ -10,6 +10,9 @@ import SwiftUI
 struct QuestionsView {
     @ObservedObject var quizzes: QuizData
     @Binding var activeView: ActiveView
+    
+    @State private var counter = 0
+    @State private var selectedAnswer = ""
 }
 
 extension QuestionsView: View {
@@ -19,8 +22,23 @@ extension QuestionsView: View {
                 .font(.title)
                 .foregroundColor(.accentColor)
             
-            Button("Done?") {
-                activeView = .result
+            Text(quizzes.quiz.questions[counter].q)
+                .font(.title2)
+            
+            Picker(selection: $selectedAnswer, label: Text("")) {
+                ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
+                    Text(answer.a).tag(answer.a)
+                }
+            }
+            .padding()
+            .pickerStyle(RadioGroupPickerStyle())
+                            
+            Button("Next") {
+                if counter >= (quizzes.quiz.questions.count - 1) {
+                    activeView = .result
+                } else {
+                    counter += 1
+                }
             }
         }
     }

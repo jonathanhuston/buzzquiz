@@ -15,8 +15,9 @@ enum ActiveView {
 }
 
 struct ContentView {
-    @StateObject var quizzes = QuizData()
-    @State var activeView: ActiveView = .chooseQuiz
+    let quizzes = QuizData()
+    
+    @State private var activeView: ActiveView = .chooseQuiz
 }
 
 extension ContentView: View {
@@ -36,6 +37,6 @@ extension ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(activeView: .chooseQuiz)
+        ContentView()
     }
 }

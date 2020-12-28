@@ -17,7 +17,7 @@ struct QuizCharacter {
     let score: Score
 }
 
-struct Answer {
+struct Answer: Hashable {
     let a: String
     let scores: [CharacterName: Score]
 }

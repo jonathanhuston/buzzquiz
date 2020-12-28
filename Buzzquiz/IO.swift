@@ -8,12 +8,12 @@
 import Foundation
 import SwiftUI
 
-let GAME_DATA_PATH = "Buzzquiz"
-let CHARACTERS_FILE = "characters.csv"
-let QUESTIONS_FILE = "questions.csv"
+private let GAME_DATA_PATH = "Buzzquiz"
+private let CHARACTERS_FILE = "characters.csv"
+private let QUESTIONS_FILE = "questions.csv"
 
-let fileManager = FileManager.default
-let home = fileManager.homeDirectoryForCurrentUser
+private let fileManager = FileManager.default
+private let home = fileManager.homeDirectoryForCurrentUser
 
 let colorKeys = [
     "blue": Color.blue,
@@ -44,7 +44,7 @@ func getQuizNames() -> [String] {
       }
 }
 
-func loadCSV(at url: URL) -> [String] {
+private func loadCSV(at url: URL) -> [String] {
     do {
         let contents = try String(contentsOf: url).split(separator: "\r\n")
         return contents.map { String($0) }
@@ -53,7 +53,7 @@ func loadCSV(at url: URL) -> [String] {
     }
 }
 
-func getDescription(from row: String) -> String {
+private func getDescription(from row: String) -> String {
     let i = row.index(row.firstIndex(of: ",") ?? row.startIndex, offsetBy: 1)
     let remainingRow = String(row[i...])
     let j = remainingRow.index(remainingRow.firstIndex(of: ",") ?? remainingRow.startIndex, offsetBy: 1)
@@ -62,7 +62,7 @@ func getDescription(from row: String) -> String {
     return description.trimQuotes()
 }
 
-func getCharacterFields(in row: String) -> (CharacterName, String, String) {
+private func getCharacterFields(in row: String) -> (CharacterName, String, String) {
     let columns = row.split(separator: ",")
     
     let name = String(columns[0])
@@ -72,7 +72,7 @@ func getCharacterFields(in row: String) -> (CharacterName, String, String) {
     return (name, color, description)
 }
 
-func loadCharacters(at url: URL) -> [QuizCharacter] {
+private func loadCharacters(at url: URL) -> [QuizCharacter] {
     var characters = [QuizCharacter]()
     let contents = loadCSV(at: url)
         
@@ -88,7 +88,7 @@ func loadCharacters(at url: URL) -> [QuizCharacter] {
     return characters
 }
 
-func getAnswer(for characters: [QuizCharacter], from content: [String.SubSequence]) -> (String, [CharacterName: Score]) {
+private func getAnswer(for characters: [QuizCharacter], from content: [String.SubSequence]) -> (String, [CharacterName: Score]) {
     var scores = [CharacterName: Score]()
     
     let answer = String(content[0])
@@ -100,11 +100,11 @@ func getAnswer(for characters: [QuizCharacter], from content: [String.SubSequenc
     return (answer, scores)
 }
 
-func getFirstColumn(from row: String) -> String {
+private func getFirstColumn(from row: String) -> String {
     return String((row.split(separator: ","))[0]).trimQuotes()
 }
 
-func getQuestion(for characters: [QuizCharacter], from contents: [String], startingAt firstRow: Int) -> (String, [Answer], Int) {
+private func getQuestion(for characters: [QuizCharacter], from contents: [String], startingAt firstRow: Int) -> (String, [Answer], Int) {
     var answers = [Answer]()
     
     let q = getFirstColumn(from: contents[firstRow])
@@ -129,12 +129,11 @@ func getQuestion(for characters: [QuizCharacter], from contents: [String], start
     return (q, answers, currentRow + 1)
 }
 
-func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
+private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
     var questions = [Question]()
     let contents = loadCSV(at: url)
     
     let quizTitle = getFirstColumn(from: contents[0])
-    print(quizTitle)
     
     var currentRow = 2
 
@@ -142,8 +141,6 @@ func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Qu
         let (q, answers, nextRow) = getQuestion(for: characters, from: contents, startingAt: currentRow)
         
         let question = Question(q: q, answers: answers)
-        print(q)
-        print(answers)
         questions.append(question)
         currentRow = nextRow
     }

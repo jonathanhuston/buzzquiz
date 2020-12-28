@@ -11,7 +11,7 @@ struct ChooseQuizView {
     @ObservedObject var quizzes: QuizData
     @Binding var activeView: ActiveView
     
-    @State var quizIndex = 0
+    @State private var quizIndex = 0
 }
 
 extension ChooseQuizView: View {
