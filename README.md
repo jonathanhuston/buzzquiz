@@ -1,4 +1,4 @@
-# Buzzquiz
+# buzzquiz
 
 SwiftUI app for running simple multiple-choice quizzes
 
