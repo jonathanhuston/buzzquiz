@@ -39,3 +39,16 @@ func getBestMatch(for characters: [QuizCharacter]) -> QuizCharacter {
     
     return bestMatch
 }
+
+func resetScores(for characters: [QuizCharacter]) -> [QuizCharacter] {
+    var reset = [QuizCharacter]()
+    
+    for character in characters {
+        reset.append(QuizCharacter(name: character.name,
+                                   color: character.color,
+                                   description: character.description,
+                                   score: 0))
+    }
+    
+    return reset
+}

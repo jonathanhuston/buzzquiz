@@ -31,6 +31,7 @@ extension ResultView: View {
                     activeView = .chooseQuiz
                 }
                 Button("Same quiz?") {
+                    quizzes.quiz.characters = resetScores(for: quizzes.quiz.characters)
                     activeView = .questions
                 }
                 Button("Quit") {
