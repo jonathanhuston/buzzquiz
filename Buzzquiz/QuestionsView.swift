@@ -56,8 +56,10 @@ extension QuestionsView: View {
                         activeView = .result
                     } else {
                         counter += 1
+                        selectedAnswer = ""
                     }
                 }
+                .disabled(selectedAnswer.isEmpty)
                 .padding()
                 
                 Button("Quit") {
