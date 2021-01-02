@@ -7,32 +7,24 @@
 
 import Foundation
 
-func updatedScores(for characters: [QuizCharacter], answers: [Answer], a: String) -> [QuizCharacter] {
-    var result = [QuizCharacter]()
-    
-    for answer in answers {
-        if answer.a == a {
-            for character in characters {
-                let score = character.score + answer.scores[character.name]!
-                let updatedCharacter = QuizCharacter(name: character.name,
-                                                     color: character.color,
-                                                     description: character.description,
-                                                     score: score)
-                result.append(updatedCharacter)
-            }
-        }
-    }
-    
-    return result
-}
-
-func getBestMatch(for characters: [QuizCharacter]) -> QuizCharacter {
+func getBestMatch(for characters: [QuizCharacter], with questions: [Question]) -> QuizCharacter {
+    var characterScores = [QuizCharacter: Score]()
     var bestMatch = QuizCharacter()
     var bestScore = 0
     
     for character in characters {
-        if character.score >= bestScore {
-            bestScore = character.score
+        characterScores[character] = 0
+        
+        for question in questions {
+            for answer in question.answers {
+                if answer.a == question.selectedAnswer {
+                    characterScores[character]! += answer.scores[character.name]!
+                }
+            }
+        }
+        
+        if characterScores[character]! >= bestScore {
+            bestScore = characterScores[character]!
             bestMatch = character
         }
     }
@@ -46,8 +38,7 @@ func resetScores(for characters: [QuizCharacter]) -> [QuizCharacter] {
     for character in characters {
         reset.append(QuizCharacter(name: character.name,
                                    color: character.color,
-                                   description: character.description,
-                                   score: 0))
+                                   description: character.description))
     }
     
     return reset

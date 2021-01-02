@@ -10,11 +10,10 @@ import Foundation
 typealias CharacterName = String
 typealias Score = Int
 
-struct QuizCharacter {
+struct QuizCharacter: Hashable {
     var name: CharacterName = ""
     var color = ""
     var description = ""
-    var score: Score = 0
 }
 
 struct Answer: Hashable {

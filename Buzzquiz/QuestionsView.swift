@@ -12,7 +12,6 @@ struct QuestionsView {
     @Binding var activeView: ActiveView
     
     @State private var counter = 0
-//    @State private var selectedAnswer = ""
 }
 
 extension QuestionsView: View {
@@ -46,24 +45,23 @@ extension QuestionsView: View {
             .padding()
             
             HStack {
-                Button("Next") {
-                    quizzes.quiz.characters =
-                        updatedScores(for: quizzes.quiz.characters,
-                                     answers: quizzes.quiz.questions[counter].answers,
-                                     a: quizzes.quiz.questions[counter].selectedAnswer)
+                Button("Prev") {
+                    if counter > 0 {
+                        counter -= 1
+                    }
+                }
+                .disabled(counter == 0)
+                .padding()
+                
+                Button(counter < quizzes.quiz.questions.count - 1 ? "Next" : "Result") {
                     if counter >= (quizzes.quiz.questions.count - 1) {
-                        quizzes.bestMatch = getBestMatch(for: quizzes.quiz.characters)
+                        quizzes.bestMatch = getBestMatch(for: quizzes.quiz.characters, with: quizzes.quiz.questions)
                         activeView = .result
                     } else {
                         counter += 1
                     }
                 }
                 .disabled(quizzes.quiz.questions[counter].selectedAnswer.isEmpty)
-                .padding()
-                
-                Button("Quit") {
-                    activeView = .quit
-                }
                 .padding()
             }
         }

@@ -80,8 +80,7 @@ private func loadCharacters(at url: URL) -> [QuizCharacter] {
         let (name, color, description) = getCharacterFields(in: row)
         let character = QuizCharacter(name: name,
                                       color: color,
-                                      description: description,
-                                      score: 0)
+                                      description: description)
         characters.append(character)
     }
     
