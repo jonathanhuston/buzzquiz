@@ -21,7 +21,7 @@ struct Answer: Hashable {
     var scores: [CharacterName: Score]
 }
 
-struct Question {
+struct Question: Hashable {
     let q: String
     var answers: [Answer]
     var selectedAnswer = ""

@@ -10,45 +10,52 @@ import SwiftUI
 struct ResultView {
     @ObservedObject var quizzes: QuizController
     @Binding var activeView: ActiveView
+    
+    @State var showingAnswers = false
 }
 
 extension ResultView: View {
     var body: some View {
-        VStack(spacing: 20) {
-            Image(quizzes.bestMatch.name.replacingOccurrences(of: " ", with: "-"))
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-            
-            Text(quizzes.bestMatch.name)
-                .font(.title)
-                .foregroundColor(colorKeys[quizzes.bestMatch.color])
-            
-            Text(quizzes.bestMatch.description)
-                .padding()
-            
-            HStack {
-                Button("Show answers") {
-                    for question in quizzes.quiz.questions {
-                        print("\(question.q) \(question.selectedAnswer.displayImageName())")
+        ZStack {
+            VStack(spacing: 20) {
+                Image(quizzes.bestMatch.name.replacingOccurrences(of: " ", with: "-"))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                
+                Text(quizzes.bestMatch.name)
+                    .font(.title)
+                    .foregroundColor(colorKeys[quizzes.bestMatch.color])
+                
+                Text(quizzes.bestMatch.description)
+                    .padding()
+                
+                HStack {
+                    Button("Show answers") {
+                        showingAnswers.toggle()
+                    }
+                                    
+                    Button("Different quiz?") {
+                        activeView = .chooseQuiz
+                    }
+                    
+                    Button("Same quiz?") {
+                        quizzes.quiz.characters = resetScores(for: quizzes.quiz.characters)
+                        quizzes.quiz.questions = resetQuestions(for: quizzes.quiz.questions)
+                        activeView = .questions
+                    }
+                    
+                    Button("Quit") {
+                        activeView = .quit
                     }
                 }
-                
-                Button("Different quiz?") {
-                    activeView = .chooseQuiz
-                }
-                
-                Button("Same quiz?") {
-                    quizzes.quiz.characters = resetScores(for: quizzes.quiz.characters)
-                    quizzes.quiz.questions = resetQuestions(for: quizzes.quiz.questions)
-                    activeView = .questions
-                }
-                
-                Button("Quit") {
-                    activeView = .quit
-                }
+                .padding()
             }
-            .padding()
+            
+            if showingAnswers {
+                ShowAnswersView(quizzes: quizzes, showingAnswers: $showingAnswers)
+            }
         }
+        .animation(.easeInOut)
     }
 }
 
