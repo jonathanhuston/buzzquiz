@@ -27,14 +27,22 @@ extension ResultView: View {
                 .padding()
             
             HStack {
+                Button("Show answers") {
+                    for question in quizzes.quiz.questions {
+                        print("\(question.q) \(question.selectedAnswer.displayImageName())")
+                    }
+                }
+                
                 Button("Different quiz?") {
                     activeView = .chooseQuiz
                 }
+                
                 Button("Same quiz?") {
                     quizzes.quiz.characters = resetScores(for: quizzes.quiz.characters)
                     quizzes.quiz.questions = resetQuestions(for: quizzes.quiz.questions)
                     activeView = .questions
                 }
+                
                 Button("Quit") {
                     activeView = .quit
                 }

@@ -31,6 +31,15 @@ extension String {
     func trimQuotes () -> String {
         return self.trimmingCharacters(in: ["\""]).replacingOccurrences(of: "\"\"", with: "\"")
     }
+    
+    func displayImageName () -> String {
+        if self.contains(".jpg") {
+            let imageName = String(self.split(separator: ".")[0])
+            return imageName.replacingOccurrences(of: "-", with: " ")
+        } else {
+            return self
+        }
+    }
 }
 
 func getQuizNames() -> [String] {
