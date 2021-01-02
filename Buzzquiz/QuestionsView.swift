@@ -12,7 +12,7 @@ struct QuestionsView {
     @Binding var activeView: ActiveView
     
     @State private var counter = 0
-    @State private var selectedAnswer = ""
+//    @State private var selectedAnswer = ""
 }
 
 extension QuestionsView: View {
@@ -25,7 +25,7 @@ extension QuestionsView: View {
             Text(quizzes.quiz.questions[counter].q)
                 .font(.title2)
             
-            Picker(selection: $selectedAnswer, label: Text("")) {
+            Picker(selection: $quizzes.quiz.questions[counter].selectedAnswer, label: Text("")) {
                 ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
                     if answer.a.contains(".jpg") {
                         let image = String(answer.a.split(separator: ".")[0])
@@ -50,23 +50,22 @@ extension QuestionsView: View {
                     quizzes.quiz.characters =
                         updatedScores(for: quizzes.quiz.characters,
                                      answers: quizzes.quiz.questions[counter].answers,
-                                     a: selectedAnswer)
+                                     a: quizzes.quiz.questions[counter].selectedAnswer)
                     if counter >= (quizzes.quiz.questions.count - 1) {
                         quizzes.bestMatch = getBestMatch(for: quizzes.quiz.characters)
                         activeView = .result
                     } else {
                         counter += 1
-                        selectedAnswer = ""
                     }
                 }
-                .disabled(selectedAnswer.isEmpty)
+                .disabled(quizzes.quiz.questions[counter].selectedAnswer.isEmpty)
                 .padding()
                 
                 Button("Quit") {
                     activeView = .quit
                 }
                 .padding()
-            }.foregroundColor(.primary)
+            }
         }
     }
 }

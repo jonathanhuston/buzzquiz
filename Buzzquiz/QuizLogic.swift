@@ -52,3 +52,15 @@ func resetScores(for characters: [QuizCharacter]) -> [QuizCharacter] {
     
     return reset
 }
+
+func resetQuestions(for questions: [Question]) -> [Question] {
+    var reset = [Question]()
+    
+    for question in questions {
+        reset.append(Question(q: question.q,
+                              answers: question.answers,
+                              selectedAnswer: ""))
+    }
+    
+    return reset
+}
