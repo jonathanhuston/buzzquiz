@@ -41,7 +41,7 @@ extension ChooseQuizView: View {
                     activeView = .quit
                 }
                 .padding()
-            }
+            }.foregroundColor(.primary)
         }
     }
 }

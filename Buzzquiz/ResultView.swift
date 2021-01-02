@@ -38,6 +38,7 @@ extension ResultView: View {
                     activeView = .quit
                 }
             }
+            .foregroundColor(.primary)
             .padding()
         }
     }

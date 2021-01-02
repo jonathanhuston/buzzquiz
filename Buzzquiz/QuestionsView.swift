@@ -66,7 +66,7 @@ extension QuestionsView: View {
                     activeView = .quit
                 }
                 .padding()
-            }
+            }.foregroundColor(.primary)
         }
     }
 }
