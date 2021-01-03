@@ -18,8 +18,7 @@ extension ResultView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 20) {
-                Image(quizzes.bestMatch.name.replacingOccurrences(of: " ", with: "-"))
-                    .resizable()
+                FileImage(quizzes.bestMatch.name.imageURL(from: quizzes.quiz.quizName))
                     .aspectRatio(contentMode: .fit)
                 
                 Text(quizzes.bestMatch.name)

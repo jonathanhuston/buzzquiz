@@ -28,8 +28,7 @@ extension QuestionsView: View {
                 ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
                     if answer.a.contains(".jpg") {
                         let image = String(answer.a.split(separator: ".")[0])
-                        Image(image)
-                            .resizable()
+                        FileImage(image.imageURL(from: quizzes.quiz.quizName))
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 75)
                             .tag(answer.a)

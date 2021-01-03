@@ -10,6 +10,7 @@
 		150145A42599FFC5009D6759 /* QuizLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 150145A32599FFC5009D6759 /* QuizLogic.swift */; };
 		1501DDC92594A35400F74244 /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1501DDC82594A35400F74244 /* QuestionsView.swift */; };
 		1501DDCC2594A36400F74244 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1501DDCB2594A36400F74244 /* ResultView.swift */; };
+		1551A7F225A1D4B000E4D9AB /* FileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1551A7F125A1D4B000E4D9AB /* FileImage.swift */; };
 		158B4AEB25A0E54400ED732F /* ShowAnswersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158B4AEA25A0E54400ED732F /* ShowAnswersView.swift */; };
 		158E7D9225955CE2002371F9 /* IO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158E7D9125955CE2002371F9 /* IO.swift */; };
 		15E2369C25935FD600324C8A /* BuzzquizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E2369B25935FD600324C8A /* BuzzquizApp.swift */; };
@@ -25,6 +26,7 @@
 		150145A32599FFC5009D6759 /* QuizLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizLogic.swift; sourceTree = "<group>"; };
 		1501DDC82594A35400F74244 /* QuestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsView.swift; sourceTree = "<group>"; };
 		1501DDCB2594A36400F74244 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		1551A7F125A1D4B000E4D9AB /* FileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImage.swift; sourceTree = "<group>"; };
 		158B4AEA25A0E54400ED732F /* ShowAnswersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAnswersView.swift; sourceTree = "<group>"; };
 		158E7D9125955CE2002371F9 /* IO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IO.swift; sourceTree = "<group>"; };
 		15E2369825935FD600324C8A /* Buzzquiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Buzzquiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +77,7 @@
 				15E961AD2594F6C000116103 /* Quiz.swift */,
 				150145A32599FFC5009D6759 /* QuizLogic.swift */,
 				158E7D9125955CE2002371F9 /* IO.swift */,
+				1551A7F125A1D4B000E4D9AB /* FileImage.swift */,
 				15E2369F25935FD600324C8A /* Assets.xcassets */,
 				15E236A425935FD600324C8A /* Info.plist */,
 				15E236A525935FD600324C8A /* Buzzquiz.entitlements */,
@@ -172,6 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1551A7F225A1D4B000E4D9AB /* FileImage.swift in Sources */,
 				15E2369E25935FD600324C8A /* ContentView.swift in Sources */,
 				1501DDCC2594A36400F74244 /* ResultView.swift in Sources */,
 				15E2369C25935FD600324C8A /* BuzzquizApp.swift in Sources */,

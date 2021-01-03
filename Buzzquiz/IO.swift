@@ -11,6 +11,7 @@ import SwiftUI
 private let GAME_DATA_PATH = "Buzzquiz"
 private let CHARACTERS_FILE = "characters.csv"
 private let QUESTIONS_FILE = "questions.csv"
+private let IMAGES_FOLDER = "images"
 
 private let fileManager = FileManager.default
 private let home = fileManager.homeDirectoryForCurrentUser
@@ -28,17 +29,24 @@ let colorKeys = [
 ]
 
 extension String {
-    func trimQuotes () -> String {
+    func trimQuotes() -> String {
         return self.trimmingCharacters(in: ["\""]).replacingOccurrences(of: "\"\"", with: "\"")
     }
     
-    func displayImageName () -> String {
+    func displayImageName() -> String {
         if self.contains(".jpg") {
             let imageName = String(self.split(separator: ".")[0])
             return imageName.replacingOccurrences(of: "-", with: " ")
         } else {
             return self
         }
+    }
+    
+    func imageURL(from quizName: String) -> URL {
+        let quizURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/")
+        let imagesURL = quizURL.appendingPathComponent(IMAGES_FOLDER)
+        
+        return imagesURL.appendingPathComponent("\(self).jpg".replacingOccurrences(of: " ", with: "-"))
     }
 }
 
