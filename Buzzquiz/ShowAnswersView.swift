@@ -36,7 +36,6 @@ extension ShowAnswersView: View {
                             .foregroundColor(.primary)
                     }
                 }
-                .foregroundColor(.white)
                 
                 Button("Hide answers") {
                     showingAnswers = false
