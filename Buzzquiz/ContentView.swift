@@ -7,28 +7,20 @@
 
 import SwiftUI
 
-enum ActiveView {
-    case chooseQuiz
-    case questions
-    case result
-    case quit
-}
-
 struct ContentView {
-    var quizzes = QuizController()
-    
-    @State private var activeView: ActiveView = .chooseQuiz
+    @EnvironmentObject var quizzes: QuizController
+    @EnvironmentObject var viewSelector: ViewSelector
 }
 
 extension ContentView: View {
     var body: some View {
-        switch activeView {
+        switch viewSelector.activeView {
         case .chooseQuiz:
-            ChooseQuizView(quizzes: quizzes, activeView: $activeView)
+            ChooseQuizView()
         case .questions:
-            QuestionsView(quizzes: quizzes, activeView: $activeView)
+            QuestionsView()
         case .result:
-            ResultView(quizzes: quizzes, activeView: $activeView)
+            ResultView()
         case .quit:
             exit(0)
         }

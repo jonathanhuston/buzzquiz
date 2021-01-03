@@ -98,7 +98,6 @@ private func loadCharacters(at url: URL) -> [QuizCharacter] {
 
 private func getAnswer(for characters: [QuizCharacter], from content: [String.SubSequence]) -> (String, [CharacterName: Score]) {
     var scores = [CharacterName: Score]()
-    
     let answer = String(content[0])
     
     for i in 1..<content.count {
@@ -114,7 +113,6 @@ private func getFirstColumn(from row: String) -> String {
 
 private func getQuestion(for characters: [QuizCharacter], from contents: [String], startingAt firstRow: Int) -> (String, [Answer], Int) {
     var answers = [Answer]()
-    
     let q = getFirstColumn(from: contents[firstRow])
     
     var currentRow = firstRow + 2
@@ -140,7 +138,6 @@ private func getQuestion(for characters: [QuizCharacter], from contents: [String
 private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
     var questions = [Question]()
     let contents = loadCSV(at: url)
-    
     let quizTitle = getFirstColumn(from: contents[0])
     
     var currentRow = 2

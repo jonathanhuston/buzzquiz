@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct QuestionsView {
-    @ObservedObject var quizzes: QuizController
-    @Binding var activeView: ActiveView
-    
+    @EnvironmentObject var quizzes: QuizController
+    @EnvironmentObject var viewSelector: ViewSelector
+
     @State private var counter = 0
 }
 
@@ -56,7 +56,7 @@ extension QuestionsView: View {
                 Button(counter < quizzes.quiz.questions.count - 1 ? "Next" : "Result") {
                     if counter >= (quizzes.quiz.questions.count - 1) {
                         quizzes.bestMatch = getBestMatch(for: quizzes.quiz.characters, with: quizzes.quiz.questions)
-                        activeView = .result
+                        viewSelector.activeView = .result
                     } else {
                         counter += 1
                     }
@@ -70,6 +70,6 @@ extension QuestionsView: View {
 
 struct QuestionsView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionsView(quizzes: QuizController(), activeView: .constant(.questions))
+        QuestionsView()
     }
 }

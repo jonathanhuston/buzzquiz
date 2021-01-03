@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ResultView {
-    @ObservedObject var quizzes: QuizController
-    @Binding var activeView: ActiveView
-    
-    @State var showingAnswers = false
+    @EnvironmentObject var quizzes: QuizController
+    @EnvironmentObject var viewSelector: ViewSelector
+
+    @State private var showingAnswers = false
 }
 
 extension ResultView: View {
@@ -35,24 +35,24 @@ extension ResultView: View {
                     }
                                     
                     Button("Different quiz?") {
-                        activeView = .chooseQuiz
+                        viewSelector.activeView = .chooseQuiz
                     }
                     
                     Button("Same quiz?") {
                         quizzes.quiz.characters = resetScores(for: quizzes.quiz.characters)
                         quizzes.quiz.questions = resetQuestions(for: quizzes.quiz.questions)
-                        activeView = .questions
+                        viewSelector.activeView = .questions
                     }
                     
                     Button("Quit") {
-                        activeView = .quit
+                        viewSelector.activeView = .quit
                     }
                 }
                 .padding()
             }
             
             if showingAnswers {
-                ShowAnswersView(quizzes: quizzes, showingAnswers: $showingAnswers)
+                ShowAnswersView(showingAnswers: $showingAnswers)
             }
         }
         .animation(.easeInOut)
@@ -61,6 +61,6 @@ extension ResultView: View {
 
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultView(quizzes: QuizController(), activeView: .constant(.result))
+        ResultView()
     }
 }

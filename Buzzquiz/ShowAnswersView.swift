@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct ShowAnswersView {
-    @ObservedObject var quizzes: QuizController
-    
+    @EnvironmentObject var quizzes: QuizController
     @Binding var showingAnswers: Bool
-
 }
 
 extension ShowAnswersView: View {
@@ -43,12 +41,11 @@ extension ShowAnswersView: View {
                 .padding()
             }
         }
-        .frame(idealWidth: .infinity, idealHeight: .infinity, alignment: .center)
     }
 }
 
 struct ShowAnswersView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowAnswersView(quizzes: QuizController(), showingAnswers: .constant(true))
+        ShowAnswersView(showingAnswers: .constant(true))
     }
 }
