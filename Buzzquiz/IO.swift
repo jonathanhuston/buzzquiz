@@ -18,14 +18,17 @@ private let home = fileManager.homeDirectoryForCurrentUser
 
 let colorKeys = [
     "blue": Color.blue,
-    "magenta": Color.purple,
+    "purple": Color.purple,
+    "magenta": Color(red: 1, green: 0, blue: 1),
     "green": Color.green,
     "red": Color.red,
     "black": Color.primary,
     "white": Color.secondary,
-    "cyan": Color.gray,
+    "cyan": Color(red: 0, green: 1, blue: 1),
+    "gray": Color.gray,
     "orange": Color.orange,
-    "pink": Color.pink
+    "pink": Color.pink,
+    "yellow": Color.yellow
 ]
 
 extension String {
