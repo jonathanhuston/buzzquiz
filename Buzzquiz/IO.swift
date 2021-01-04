@@ -60,17 +60,14 @@ func getQuizNames() -> [String] {
         let contents = try fileManager.contentsOfDirectory(at: buzzquizUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
         return contents.map { $0.lastPathComponent }
       } catch {
-        return []
+        fatalError("~/Buzzquiz directory must contain separate folders for each quiz")
       }
 }
 
-private func loadCSV(at url: URL) -> [String] {
-    do {
-        let contents = try String(contentsOf: url).split(separator: "\r\n")
-        return contents.map { String($0) }
-    } catch {
-        return [""]
-    }
+private func loadCSV(at url: URL) throws -> [String] {
+    let contents = try String(contentsOf: url).split(separator: "\r\n")
+    
+    return contents.map { String($0) }
 }
 
 private func getDescription(from row: String) -> String {
@@ -94,7 +91,13 @@ private func getCharacterFields(in row: String) -> (CharacterName, String, Strin
 
 private func loadCharacters(at url: URL) -> [QuizCharacter] {
     var characters = [QuizCharacter]()
-    let contents = loadCSV(at: url)
+    var contents = [String]()
+    
+    do {
+        contents = try loadCSV(at: url)
+    } catch {
+        fatalError("Incorrectly formatted characters.csv file")
+    }
         
     for row in contents {
         let (name, color, description) = getCharacterFields(in: row)
@@ -134,7 +137,7 @@ private func getQuestion(for characters: [QuizCharacter], from contents: [String
         if content.isEmpty {
             break
         }
-        
+                
         let (a, scores) = getAnswer(for: characters, from: content)
         let answer = Answer(a: a, scores: scores)
         
@@ -142,15 +145,21 @@ private func getQuestion(for characters: [QuizCharacter], from contents: [String
         currentRow += 1
     }
     
-    
     return (q, answers, currentRow + 1)
 }
 
 private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
     var questions = [Question]()
-    let contents = loadCSV(at: url)
-    let quizTitle = getFirstColumn(from: contents[0])
+    var contents = [String]()
     
+    do {
+        contents = try loadCSV(at: url)
+    } catch {
+        fatalError("Incorrectly formatted questions.csv file")
+    }
+        
+    let quizTitle = getFirstColumn(from: contents[0])
+        
     var currentRow = 2
 
     while currentRow < contents.count {
