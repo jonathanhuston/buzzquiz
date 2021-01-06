@@ -7,10 +7,11 @@
 
 import Foundation
 import SwiftUI
+import CoreXLSX
 
 private let GAME_DATA_PATH = "Buzzquiz"
-private let CHARACTERS_FILE = "characters.csv"
-private let QUESTIONS_FILE = "questions.csv"
+private let CHARACTERS_FILE = "characters.xlsx"
+private let QUESTIONS_FILE = "questions.xlsx"
 private let IMAGES_FOLDER = "images"
 
 private let fileManager = FileManager.default
@@ -32,10 +33,6 @@ let colorKeys = [
 ]
 
 extension String {
-    func trimQuotes() -> String {
-        return self.trimmingCharacters(in: ["\""]).replacingOccurrences(of: "\"\"", with: "\"")
-    }
-    
     func displayImageName() -> String {
         if self.contains(".jpg") {
             let imageName = String(self.split(separator: ".")[0])
@@ -64,43 +61,42 @@ func getQuizNames() -> [String] {
       }
 }
 
-private func loadCSV(at url: URL) throws -> [String] {
-    let contents = try String(contentsOf: url).split(separator: "\r\n")
+private func getWorksheet(url: URL) -> (Worksheet, SharedStrings) {
+    var worksheet: Worksheet
     
-    return contents.map { String($0) }
+    guard let file = XLSXFile(filepath: url.path) else {
+        fatalError("\(url.lastPathComponent) is corrupted or does not exist")
+    }
+    
+    guard let sharedStrings = try! file.parseSharedStrings() else {
+        fatalError("\(url.lastPathComponent) is not formatted correctly")
+    }
+    
+    do {
+        let path = try file.parseWorksheetPaths()
+        worksheet = try file.parseWorksheet(at: path[0])
+    } catch {
+        fatalError("\(url.lastPathComponent) is not formatted correctly")
+    }
+    
+    return (worksheet, sharedStrings)
 }
 
-private func getDescription(from row: String) -> String {
-    let i = row.index(row.firstIndex(of: ",") ?? row.startIndex, offsetBy: 1)
-    let remainingRow = String(row[i...])
-    let j = remainingRow.index(remainingRow.firstIndex(of: ",") ?? remainingRow.startIndex, offsetBy: 1)
-    let description = String(remainingRow[j...])
-    
-    return description.trimQuotes()
-}
-
-private func getCharacterFields(in row: String) -> (CharacterName, String, String) {
-    let columns = row.split(separator: ",")
-    
-    let name = String(columns[0])
-    let color = String(columns[1])
-    let description = getDescription(from: row)
+private func getCharacterFields(in row: Row, with sharedStrings: SharedStrings) -> (CharacterName, String, String) {
+    let name = row.cells[0].stringValue(sharedStrings) ?? ""
+    let color = row.cells[1].stringValue(sharedStrings) ?? ""
+    let description = row.cells[2].stringValue(sharedStrings) ?? ""
     
     return (name, color, description)
 }
 
 private func loadCharacters(at url: URL) -> [QuizCharacter] {
     var characters = [QuizCharacter]()
-    var contents = [String]()
     
-    do {
-        contents = try loadCSV(at: url)
-    } catch {
-        fatalError("Incorrectly formatted characters.csv file")
-    }
-        
-    for row in contents {
-        let (name, color, description) = getCharacterFields(in: row)
+    let (worksheet, sharedStrings) = getWorksheet(url: url)
+            
+    for row in worksheet.data?.rows ?? [] {
+        let (name, color, description) = getCharacterFields(in: row, with: sharedStrings)
         let character = QuizCharacter(name: name,
                                       color: color,
                                       description: description)
@@ -110,35 +106,36 @@ private func loadCharacters(at url: URL) -> [QuizCharacter] {
     return characters
 }
 
-private func getAnswer(for characters: [QuizCharacter], from content: [String.SubSequence]) -> (String, [CharacterName: Score]) {
+private func cellValue(worksheet: Worksheet, column: String, row: UInt, with sharedStrings: SharedStrings) -> String {
+    return worksheet.cells(atColumns: [ColumnReference(column)!], rows: [row]).first?.stringValue(sharedStrings) ?? ""
+}
+
+private func getAnswer(for characters: [QuizCharacter], from row: [Cell], with sharedStrings: SharedStrings) -> (String, [CharacterName: Score]) {
     var scores = [CharacterName: Score]()
-    let answer = String(content[0])
+    let answer = row.first?.stringValue(sharedStrings) ?? ""
     
-    for i in 1..<content.count {
-        scores[characters[i-1].name] = Int(content[i])
+    for i in 1..<row.count {
+        scores[characters[i-1].name] = Int(row[i].stringValue(sharedStrings) ?? "0")
     }
     
     return (answer, scores)
 }
 
-private func getFirstColumn(from row: String) -> String {
-    return String((row.split(separator: ","))[0]).trimQuotes()
-}
-
-private func getQuestion(for characters: [QuizCharacter], from contents: [String], startingAt firstRow: Int) -> (String, [Answer], Int) {
+private func getQuestion(for characters: [QuizCharacter], from worksheet: Worksheet, with sharedStrings: SharedStrings, startingAt firstRow: UInt) -> (String, [Answer], UInt) {
     var answers = [Answer]()
-    let q = getFirstColumn(from: contents[firstRow])
-    
+
+    let q = cellValue(worksheet: worksheet, column: "A", row: firstRow, with: sharedStrings)
+        
     var currentRow = firstRow + 2
     
-    while currentRow < contents.count {
-        let content = contents[currentRow].split(separator: ",")
+    while currentRow <= (worksheet.data?.rows.last!.reference)! {
+        let row = worksheet.cells(atRows: [currentRow])
         
-        if content.isEmpty {
+        if row.count == 0 {
             break
         }
-                
-        let (a, scores) = getAnswer(for: characters, from: content)
+        
+        let (a, scores) = getAnswer(for: characters, from: row, with: sharedStrings)
         let answer = Answer(a: a, scores: scores)
         
         answers.append(answer)
@@ -149,21 +146,17 @@ private func getQuestion(for characters: [QuizCharacter], from contents: [String
 }
 
 private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
+    var quizTitle = ""
     var questions = [Question]()
-    var contents = [String]()
     
-    do {
-        contents = try loadCSV(at: url)
-    } catch {
-        fatalError("Incorrectly formatted questions.csv file")
-    }
-        
-    let quizTitle = getFirstColumn(from: contents[0])
-        
-    var currentRow = 2
+    let (worksheet, sharedStrings) = getWorksheet(url: url)
 
-    while currentRow < contents.count {
-        let (q, answers, nextRow) = getQuestion(for: characters, from: contents, startingAt: currentRow)
+    quizTitle = cellValue(worksheet: worksheet, column: "A", row: 1, with: sharedStrings)
+    
+    var currentRow: UInt = 3
+            
+    while currentRow <= (worksheet.data?.rows.last!.reference)! {
+        let (q, answers, nextRow) = getQuestion(for: characters, from: worksheet, with: sharedStrings, startingAt: currentRow)
         
         let question = Question(q: q, answers: answers)
         questions.append(question)

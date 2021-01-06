@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		1551A7F225A1D4B000E4D9AB /* FileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1551A7F125A1D4B000E4D9AB /* FileImage.swift */; };
 		158B4AEB25A0E54400ED732F /* ShowAnswersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158B4AEA25A0E54400ED732F /* ShowAnswersView.swift */; };
 		158E7D9225955CE2002371F9 /* IO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158E7D9125955CE2002371F9 /* IO.swift */; };
+		1598C80125A6152B0050C0A0 /* CoreXLSX in Frameworks */ = {isa = PBXBuildFile; productRef = 1598C80025A6152B0050C0A0 /* CoreXLSX */; };
 		15E2369C25935FD600324C8A /* BuzzquizApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E2369B25935FD600324C8A /* BuzzquizApp.swift */; };
 		15E2369E25935FD600324C8A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E2369D25935FD600324C8A /* ContentView.swift */; };
 		15E236A025935FD600324C8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15E2369F25935FD600324C8A /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1598C80125A6152B0050C0A0 /* CoreXLSX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +124,9 @@
 			dependencies = (
 			);
 			name = Buzzquiz;
+			packageProductDependencies = (
+				1598C80025A6152B0050C0A0 /* CoreXLSX */,
+			);
 			productName = Buzzquiz;
 			productReference = 15E2369825935FD600324C8A /* Buzzquiz.app */;
 			productType = "com.apple.product-type.application";
@@ -149,6 +154,9 @@
 				Base,
 			);
 			mainGroup = 15E2368F25935FD600324C8A;
+			packageReferences = (
+				1598C7FF25A6152B0050C0A0 /* XCRemoteSwiftPackageReference "CoreXLSX" */,
+			);
 			productRefGroup = 15E2369925935FD600324C8A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -377,6 +385,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1598C7FF25A6152B0050C0A0 /* XCRemoteSwiftPackageReference "CoreXLSX" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoreOffice/CoreXLSX";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1598C80025A6152B0050C0A0 /* CoreXLSX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1598C7FF25A6152B0050C0A0 /* XCRemoteSwiftPackageReference "CoreXLSX" */;
+			productName = CoreXLSX;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 15E2369025935FD600324C8A /* Project object */;
 }
