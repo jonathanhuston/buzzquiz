@@ -15,7 +15,7 @@ struct ShowAnswersView {
 extension ShowAnswersView: View {
     var body: some View {
         ZStack {
-            Color.black
+            Color.primary.colorInvert()
             
             VStack(spacing: 20) {
                 Text(quizzes.bestMatch.name)
