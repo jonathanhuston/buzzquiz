@@ -2,7 +2,7 @@
 
 SwiftUI app for running simple multiple-choice quizzes
 
-Quiz data stored in CSV and JPG files at $HOME/Buzzquiz/QUIZNAME/
+Quiz data stored in XLSX and JPG files at $HOME/Buzzquiz/QUIZNAME/
 
 
 
