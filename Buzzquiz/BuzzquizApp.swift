@@ -25,7 +25,7 @@ struct BuzzquizApp: App {
             ContentView()
                 .environmentObject(ViewSelector())
                 .environmentObject(QuizController())
-                .frame(minWidth: 750, minHeight: 750, alignment: .center)
+                .frame(minWidth: 800, minHeight: 800, alignment: .center)
         }
     }
 }

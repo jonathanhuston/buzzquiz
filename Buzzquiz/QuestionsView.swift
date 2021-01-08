@@ -24,44 +24,72 @@ extension QuestionsView: View {
             Text(quizzes.quiz.questions[counter].q)
                 .font(.title2)
             
-            Picker(selection: $quizzes.quiz.questions[counter].selectedAnswer, label: Text("")) {
+            let gridItems = [GridItem(), GridItem()]
+            
+            LazyVGrid(columns: gridItems) {
                 ForEach(quizzes.quiz.questions[counter].answers, id:\.self) { answer in
-                    if answer.a.contains(".jpg") {
-                        let image = String(answer.a.split(separator: ".")[0])
-                        FileImage(image.imageURL(from: quizzes.quiz.quizName))
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 75)
-                            .tag(answer.a)
-
-                    } else {
-                        Text(answer.a)
-                            .tag(answer.a)
-
-                    }
+                        Button(action: {
+                            quizzes.quiz.questions[counter].selectedAnswer = answer.a
+                        }) {
+                            ZStack {
+                                if quizzes.quiz.questions[counter].selectedAnswer == answer.a {
+                                    Color.secondary.colorInvert()
+                                        .frame(minHeight: 75)
+                                        .border(Color.purple)
+                                } else {
+                                    Color.secondary.colorInvert()
+                                        .frame(minHeight: 75)
+                                }
+                                
+                                if answer.a.contains(".jpg") {
+                                    let image = String(answer.a.split(separator: ".")[0])
+                                    FileImage(image.imageURL(from: quizzes.quiz.quizName))
+                                        .aspectRatio(contentMode: .fit)
+                                        .padding(10)
+                                        .frame(height: 140)
+                                } else {
+                                    Text(answer.a)
+                                        .frame(height: 75)
+                                }
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
                 }
             }
-            .pickerStyle(RadioGroupPickerStyle())
-            .padding()
+            .padding(.horizontal)
+            .frame(minHeight: 450)
             
-            HStack {
-                Button("Prev") {
-                    if counter > 0 {
-                        counter -= 1
-                    }
+            HStack(spacing: 40) {
+                Button(action: {
+                        if counter > 0 {
+                            counter -= 1
+                        }
+                }) {
+                    Image(systemName: "arrow.backward")
+                        .frame(width: 50)
                 }
                 .disabled(counter == 0)
-                .padding()
                 
-                Button(counter < quizzes.quiz.questions.count - 1 ? "Next" : "Result") {
+                Text("\(counter + 1) / \(quizzes.quiz.questions.count)")
+                    .frame(width: 50)
+                
+                Button(action: {
                     if counter >= (quizzes.quiz.questions.count - 1) {
                         quizzes.bestMatch = getBestMatch(for: quizzes.quiz.characters, with: quizzes.quiz.questions)
                         viewSelector.activeView = .result
                     } else {
                         counter += 1
                     }
+                }) {
+                    if (counter < quizzes.quiz.questions.count - 1) {
+                        Image(systemName: "arrow.forward")
+                            .frame(width: 50)
+                    } else {
+                        Text("Result")
+                            .frame(width: 50)
+                    }
                 }
                 .disabled(quizzes.quiz.questions[counter].selectedAnswer.isEmpty)
-                .padding()
             }
         }
     }

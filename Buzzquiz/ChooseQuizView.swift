@@ -30,17 +30,12 @@ extension ChooseQuizView: View {
             .padding()
             .pickerStyle(RadioGroupPickerStyle())
             
-            HStack {
-                Button("Play") {
-                    quizzes.quiz = loadQuizData(quizName: quizzes.names[quizIndex])
-                    viewSelector.activeView = .questions
-                }
-                .padding()
-                
-                Button("Quit") {
-                    viewSelector.activeView = .quit
-                }
-                .padding()
+            Button(action: {
+                quizzes.quiz = loadQuizData(quizName: quizzes.names[quizIndex])
+                viewSelector.activeView = .questions
+            }) {
+                Text("Play")
+                    .frame(width: 100)
             }
         }
     }

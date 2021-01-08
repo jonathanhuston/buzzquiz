@@ -28,7 +28,7 @@ extension ResultView: View {
                 Text(quizzes.bestMatch.description)
                     .padding()
                 
-                HStack {
+                HStack(spacing: 40) {
                     Button("Show answers") {
                         showingAnswers.toggle()
                     }
