@@ -16,18 +16,16 @@ struct ChooseQuizView {
 
 extension ChooseQuizView: View {
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 60) {
             Text("Which quiz do you want to play?")
                 .font(.title)
                 .foregroundColor(.accentColor)
-                .padding()
             
             Picker(selection: $quizIndex, label: Text("")) {
                 ForEach(quizzes.names.indices) { i in
                     Text(quizzes.names[i]).tag(i)
                 }
             }
-            .padding()
             .pickerStyle(RadioGroupPickerStyle())
             
             Button(action: {
