@@ -3,7 +3,7 @@
 //  Buzzquiz
 //
 //  Created by Jonathan Huston on 1/3/21.
-//  Credits: https://www.hackingwithswift.com/forums/swiftui/loading-images/3292
+//  Pilfered from: https://www.hackingwithswift.com/forums/swiftui/loading-images/3292
 
 import SwiftUI
 
@@ -54,7 +54,7 @@ struct FileImage: View {
             return loading
         case .failure:
             return failure
-        default:
+        case .success:
             if let image = NSImage(data: loader.data) {
                 return Image(nsImage: image)
             } else {
