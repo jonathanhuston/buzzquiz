@@ -10,30 +10,32 @@ import SwiftUI
 struct ChooseQuizView {
     @EnvironmentObject var quizzes: QuizController
     @EnvironmentObject var viewSelector: ViewSelector
-
-    @State private var quizIndex = 0
 }
 
 extension ChooseQuizView: View {
     var body: some View {
-        VStack(spacing: 60) {
+        VStack(spacing: 20) {
             Text("Which quiz do you want to play?")
                 .font(.title)
                 .foregroundColor(.accentColor)
+                .padding()
             
-            Picker(selection: $quizIndex, label: Text("")) {
-                ForEach(quizzes.names.indices) { i in
-                    Text(quizzes.names[i]).tag(i)
+            ForEach(quizzes.names, id:\.self) { name in
+                Button(action: {
+                    quizzes.quiz = loadQuizData(quizName: name)
+                    viewSelector.activeView = .questions
+                }) {
+                    ZStack {
+                        Color.secondary.colorInvert()
+                            .frame(width: 200, height: 40)
+                            .border(Color.purple)
+                        
+                        Text(name)
+                            .background(Color.secondary.colorInvert())
+                            .frame(width: 200)
+                    }
                 }
-            }
-            .pickerStyle(RadioGroupPickerStyle())
-            
-            Button(action: {
-                quizzes.quiz = loadQuizData(quizName: quizzes.names[quizIndex])
-                viewSelector.activeView = .questions
-            }) {
-                Text("Play")
-                    .frame(width: 100)
+                .buttonStyle(PlainButtonStyle())
             }
         }
     }
