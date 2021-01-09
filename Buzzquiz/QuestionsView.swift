@@ -98,5 +98,7 @@ extension QuestionsView: View {
 struct QuestionsView_Previews: PreviewProvider {
     static var previews: some View {
         QuestionsView()
+            .environmentObject(ViewSelector())
+            .environmentObject(QuizController())
     }
 }

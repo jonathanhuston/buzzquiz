@@ -49,5 +49,7 @@ extension ChooseQuizView: View {
 struct ChooseQuizView_Previews: PreviewProvider {
     static var previews: some View {
         ChooseQuizView()
+            .environmentObject(ViewSelector())
+            .environmentObject(QuizController())
     }
 }

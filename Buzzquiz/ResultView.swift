@@ -62,5 +62,7 @@ extension ResultView: View {
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
         ResultView()
+            .environmentObject(ViewSelector())
+            .environmentObject(QuizController())
     }
 }

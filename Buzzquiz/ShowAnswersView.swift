@@ -46,5 +46,6 @@ extension ShowAnswersView: View {
 struct ShowAnswersView_Previews: PreviewProvider {
     static var previews: some View {
         ShowAnswersView(showingAnswers: .constant(true))
+            .environmentObject(QuizController())
     }
 }
