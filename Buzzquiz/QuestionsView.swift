@@ -20,6 +20,7 @@ extension QuestionsView: View {
             Text(quizzes.quiz.quizTitle)
                 .font(.title)
                 .foregroundColor(.accentColor)
+                .padding()
             
             Text(quizzes.quiz.questions[counter].q)
                 .font(.title2)

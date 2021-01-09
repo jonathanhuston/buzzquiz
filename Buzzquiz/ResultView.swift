@@ -18,29 +18,30 @@ extension ResultView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 20) {
-                FileImage(quizzes.bestMatch.name.imageURL(from: quizzes.quiz.quizName))
-                    .aspectRatio(contentMode: .fit)
-                
                 Text(quizzes.bestMatch.name)
                     .font(.title)
                     .foregroundColor(colorKeys[quizzes.bestMatch.color])
+                    .padding()
+                
+                FileImage(quizzes.bestMatch.name.imageURL(from: quizzes.quiz.quizName))
+                    .aspectRatio(contentMode: .fit)
                 
                 Text(quizzes.bestMatch.description)
                     .padding()
                 
-                HStack(spacing: 40) {
+                HStack(spacing: 20) {
                     Button("Show answers") {
                         showingAnswers.toggle()
                     }
-                                    
-                    Button("Different quiz?") {
-                        viewSelector.activeView = .chooseQuiz
-                    }
                     
-                    Button("Same quiz?") {
+                    Button("Same quiz") {
                         quizzes.quiz.characters = resetScores(for: quizzes.quiz.characters)
                         quizzes.quiz.questions = resetQuestions(for: quizzes.quiz.questions)
                         viewSelector.activeView = .questions
+                    }
+                                    
+                    Button("Different quiz") {
+                        viewSelector.activeView = .chooseQuiz
                     }
                     
                     Button("Quit") {
