@@ -20,10 +20,15 @@ extension ChooseQuizView: View {
                 .foregroundColor(.accentColor)
                 .padding()
             
-            ForEach(quizzes.names, id:\.self) { name in
+            ForEach(quizzes.names!, id:\.self) { name in
                 Button(action: {
-                    quizzes.quiz = loadQuizData(quizName: name)
-                    viewSelector.activeView = .questions
+                    let (quiz, error) = loadQuizData(quizName: name)
+                    if error == ":ok" {
+                        quizzes.quiz = quiz!
+                        viewSelector.activeView = .questions
+                    } else {
+                        viewSelector.activeView = .error(error)
+                    }
                 }) {
                     ZStack {
                         Color.secondary.colorInvert()

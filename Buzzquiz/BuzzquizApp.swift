@@ -11,11 +11,12 @@ enum ActiveView {
     case chooseQuiz
     case questions
     case result
+    case error(String)
     case quit
 }
 
 class ViewSelector: ObservableObject {
-    @Published var activeView: ActiveView = .chooseQuiz
+    @Published var activeView: ActiveView = (getQuizNames().error == ":ok" ? .chooseQuiz : .error(getQuizNames().error))
 }
 
 @main

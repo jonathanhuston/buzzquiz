@@ -21,6 +21,8 @@ extension ContentView: View {
             QuestionsView()
         case .result:
             ResultView()
+        case .error:
+            ErrorView()
         case .quit:
             exit(0)
         }

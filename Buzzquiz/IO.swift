@@ -12,7 +12,7 @@ import CoreXLSX
 private let GAME_DATA_PATH = "Buzzquiz"
 private let CHARACTERS_FILE = "characters.xlsx"
 private let QUESTIONS_FILE = "questions.xlsx"
-private let IMAGES_FOLDER = "images"
+private let IMAGES_FOLDER = "Images"
 
 private let fileManager = FileManager.default
 private let home = fileManager.homeDirectoryForCurrentUser
@@ -43,57 +43,70 @@ extension String {
     }
     
     func imageURL(from quizName: String) -> URL {
-        let quizURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/")
-        let imagesURL = quizURL.appendingPathComponent(IMAGES_FOLDER)
+        let imagesURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/\(IMAGES_FOLDER)")
         
-        return imagesURL.appendingPathComponent("\(self).jpg".replacingOccurrences(of: " ", with: "-"))
+        if !fileManager.fileExists(atPath: imagesURL.path) {
+            fatalError("Images folder not found")
+        }
+        
+        let imageURL = imagesURL.appendingPathComponent("\(self).jpg".replacingOccurrences(of: " ", with: "-"))
+                                
+        if !fileManager.fileExists(atPath: imageURL.path) {
+            fatalError("\(imageURL.lastPathComponent) not found")
+        }
+        
+        return imageURL
     }
 }
 
-func getQuizNames() -> [String] {
+func getQuizNames() -> (names: [String]?, error: String) {
     let buzzquizUrl = home.appendingPathComponent(GAME_DATA_PATH)
     
     do {
         let contents = try fileManager.contentsOfDirectory(at: buzzquizUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-        return contents.map { $0.lastPathComponent }
+        return (contents.map { $0.lastPathComponent }, ":ok")
       } catch {
-        fatalError("~/Buzzquiz directory must contain separate folders for each quiz")
+        return (nil, "~/Buzzquiz directory must contain separate folders for each quiz")
       }
 }
 
-private func getWorksheet(url: URL) -> (Worksheet, SharedStrings) {
+private func getWorksheet(url: URL) -> (Worksheet?, SharedStrings?, error: String) {
     var worksheet: Worksheet
     
     guard let file = XLSXFile(filepath: url.path) else {
-        fatalError("\(url.lastPathComponent) is corrupted or does not exist")
+        return (nil, nil, "\(url.lastPathComponent) not found")
     }
     
     guard let sharedStrings = try! file.parseSharedStrings() else {
-        fatalError("\(url.lastPathComponent) is not formatted correctly")
+        return (nil, nil, "\(url.lastPathComponent) is not formatted correctly")
     }
     
     do {
         let path = try file.parseWorksheetPaths()
         worksheet = try file.parseWorksheet(at: path[0])
     } catch {
-        fatalError("\(url.lastPathComponent) is not formatted correctly")
+        return (nil, nil, "\(url.lastPathComponent) is not formatted correctly")
     }
     
-    return (worksheet, sharedStrings)
+    return (worksheet, sharedStrings, ":ok")
 }
 
 private func getCharacterFields(in row: Row, with sharedStrings: SharedStrings) -> (CharacterName, String, String) {
     let name = row.cells[0].stringValue(sharedStrings) ?? ""
-    let color = row.cells[1].stringValue(sharedStrings) ?? ""
+    let color = row.cells[1].stringValue(sharedStrings) ?? "black"
     let description = row.cells[2].stringValue(sharedStrings) ?? ""
     
     return (name, color, description)
 }
 
-private func loadCharacters(at url: URL) -> [QuizCharacter] {
+private func loadCharacters(at url: URL) -> ([QuizCharacter]?, error: String) {
     var characters = [QuizCharacter]()
     
-    let (worksheet, sharedStrings) = getWorksheet(url: url)
+    let (ws, ss, error) = getWorksheet(url: url)
+    
+    guard let worksheet = ws, let sharedStrings = ss else {
+        return (nil, error)
+    }
             
     for row in worksheet.data?.rows ?? [] {
         let (name, color, description) = getCharacterFields(in: row, with: sharedStrings)
@@ -103,7 +116,7 @@ private func loadCharacters(at url: URL) -> [QuizCharacter] {
         characters.append(character)
     }
     
-    return characters
+    return (characters, ":ok")
 }
 
 private func cellValue(worksheet: Worksheet, column: String, row: UInt, with sharedStrings: SharedStrings) -> String {
@@ -145,11 +158,15 @@ private func getQuestion(for characters: [QuizCharacter], from worksheet: Worksh
     return (q, answers, currentRow + 1)
 }
 
-private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (String, [Question]) {
+private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (quizTitle: String?, questions: [Question]?, error: String) {
     var quizTitle = ""
     var questions = [Question]()
     
-    let (worksheet, sharedStrings) = getWorksheet(url: url)
+    let (ws, ss, error) = getWorksheet(url: url)
+    
+    guard let worksheet = ws, let sharedStrings = ss else {
+        return (nil, nil, error)
+    }
 
     quizTitle = cellValue(worksheet: worksheet, column: "A", row: 1, with: sharedStrings)
     
@@ -163,21 +180,30 @@ private func loadQuestions(for characters: [QuizCharacter], at url: URL) -> (Str
         currentRow = nextRow
     }
     
-    return (quizTitle, questions)
+    return (quizTitle, questions, ":ok")
 }
 
-func loadQuizData(quizName: String) -> Quiz {
+func loadQuizData(quizName: String) -> (quiz: Quiz?, error: String) {
     let quizURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/")
     let charactersURL = quizURL.appendingPathComponent(CHARACTERS_FILE)
     let questionsURL = quizURL.appendingPathComponent(QUESTIONS_FILE)
 
-    let characters = loadCharacters(at: charactersURL)
-    let (quizTitle, questions) = loadQuestions(for: characters, at: questionsURL)
+    let (chars, charactersError) = loadCharacters(at: charactersURL)
+    
+    guard let characters = chars else {
+        return (nil, charactersError)
+    }
+    
+    let (qt, quests, questionsError) = loadQuestions(for: characters, at: questionsURL)
+    
+    guard let quizTitle = qt, let questions = quests else {
+        return (nil, questionsError)
+    }
     
     let quiz = Quiz(quizName: quizName,
                     quizTitle: quizTitle,
                     characters: characters,
                     questions: questions)
     
-    return quiz
+    return (quiz, ":ok")
 }
