@@ -42,9 +42,8 @@ extension QuestionsView: View {
                                         .frame(minHeight: 75)
                                 }
                                 
-                                if answer.a.contains(".jpg") {
-                                    let image = String(answer.a.split(separator: ".")[0])
-                                    FileImage(image.imageURL(from: quizzes.quiz.quizName))
+                                if answer.a.isImage {
+                                    FileImage(answer.a.imageName.imageURL(from: quizzes.quiz.quizName))
                                         .aspectRatio(contentMode: .fit)
                                         .padding(10)
                                         .frame(height: 140)
@@ -75,11 +74,11 @@ extension QuestionsView: View {
                     .frame(width: 50)
                 
                 Button(action: {
-                    if counter >= (quizzes.quiz.questions.count - 1) {
+                    if counter < (quizzes.quiz.questions.count - 1) {
+                        counter += 1
+                    } else {
                         quizzes.bestMatch = getBestMatch(for: quizzes.quiz.characters, with: quizzes.quiz.questions)
                         viewSelector.activeView = .result
-                    } else {
-                        counter += 1
                     }
                 }) {
                     if (counter < quizzes.quiz.questions.count - 1) {

@@ -20,7 +20,7 @@ extension ChooseQuizView: View {
                 .foregroundColor(.accentColor)
                 .padding()
             
-            ForEach(quizzes.names!, id:\.self) { name in
+            ForEach(quizzes.quizNames!, id:\.self) { name in
                 Button(action: {
                     let (quiz, error) = loadQuizData(quizName: name)
                     if error == ":ok" {

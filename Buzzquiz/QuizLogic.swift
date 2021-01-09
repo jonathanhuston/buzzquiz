@@ -18,7 +18,7 @@ func getBestMatch(for characters: [QuizCharacter], with questions: [Question]) -
         for question in questions {
             for answer in question.answers {
                 if answer.a == question.selectedAnswer {
-                    characterScores[character]! += answer.scores[character.name]!
+                    characterScores[character]! += answer.scores[character.name] ?? 0
                 }
             }
         }

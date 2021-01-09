@@ -13,18 +13,20 @@ struct ErrorView {
 
 extension ErrorView: View {
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 40) {
             switch viewSelector.activeView {
             case let .error(error):
                 Text(error)
                     .font(.title)
                     .foregroundColor(.red)
                     .padding()
+                    .border(Color.red)
             default:
                 Text("Fatal error")
                     .font(.title)
                     .foregroundColor(.red)
                     .padding()
+                    .border(Color.red)
             }
         
             Button("Quit") {

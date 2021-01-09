@@ -28,7 +28,7 @@ extension ShowAnswersView: View {
                         Text("\(question.q)")
                             .font(.title2)
                             .foregroundColor(.accentColor)
-                        Text("\(question.selectedAnswer.displayImageName())")
+                        Text("\(question.selectedAnswer.imageName)")
                             .font(.title2)
                             .foregroundColor(.primary)
                     }

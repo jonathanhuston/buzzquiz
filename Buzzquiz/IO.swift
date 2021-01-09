@@ -33,10 +33,13 @@ let colorKeys = [
 ]
 
 extension String {
-    func displayImageName() -> String {
-        if self.contains(".jpg") {
-            let imageName = String(self.split(separator: ".")[0])
-            return imageName.replacingOccurrences(of: "-", with: " ")
+    var isImage: Bool {
+        return self.contains(".jpg")
+    }
+    
+    var imageName: String {
+        if self.isImage {
+            return String(self.split(separator: ".")[0]).replacingOccurrences(of: "-", with: " ")
         } else {
             return self
         }
@@ -64,9 +67,14 @@ func getQuizNames() -> (names: [String]?, error: String) {
     
     do {
         let contents = try fileManager.contentsOfDirectory(at: buzzquizUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+        
+        if contents.isEmpty {
+            return (nil, "Buzzquiz folder much contain subfolders for each quiz")
+        }
+        
         return (contents.map { $0.lastPathComponent }, ":ok")
       } catch {
-        return (nil, "~/Buzzquiz directory must contain separate folders for each quiz")
+        return (nil, "Buzzquiz folder not found in home directory")
       }
 }
 
@@ -78,25 +86,29 @@ private func getWorksheet(url: URL) -> (Worksheet?, SharedStrings?, error: Strin
     }
     
     guard let sharedStrings = try! file.parseSharedStrings() else {
-        return (nil, nil, "\(url.lastPathComponent) is not formatted correctly")
+        return (nil, nil, "\(url.lastPathComponent) not formatted correctly")
     }
     
     do {
         let path = try file.parseWorksheetPaths()
         worksheet = try file.parseWorksheet(at: path[0])
     } catch {
-        return (nil, nil, "\(url.lastPathComponent) is not formatted correctly")
+        return (nil, nil, "\(url.lastPathComponent) not formatted correctly")
     }
     
     return (worksheet, sharedStrings, ":ok")
 }
 
-private func getCharacterFields(in row: Row, with sharedStrings: SharedStrings) -> (CharacterName, String, String) {
+private func getCharacterFields(in row: Row, with sharedStrings: SharedStrings) -> (CharacterName, String, String, error: String) {
+    if row.cells.count < 3 {
+        return ("", "", "", "\(CHARACTERS_FILE) not formatted correctly")
+    }
+
     let name = row.cells[0].stringValue(sharedStrings) ?? ""
     let color = row.cells[1].stringValue(sharedStrings) ?? "black"
     let description = row.cells[2].stringValue(sharedStrings) ?? ""
     
-    return (name, color, description)
+    return (name, color, description, ":ok")
 }
 
 private func loadCharacters(at url: URL) -> ([QuizCharacter]?, error: String) {
@@ -109,7 +121,12 @@ private func loadCharacters(at url: URL) -> ([QuizCharacter]?, error: String) {
     }
             
     for row in worksheet.data?.rows ?? [] {
-        let (name, color, description) = getCharacterFields(in: row, with: sharedStrings)
+        let (name, color, description, error) = getCharacterFields(in: row, with: sharedStrings)
+        
+        if error != ":ok" {
+            return (nil, error)
+        }
+        
         let character = QuizCharacter(name: name,
                                       color: color,
                                       description: description)
