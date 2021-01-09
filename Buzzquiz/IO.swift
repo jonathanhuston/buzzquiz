@@ -48,15 +48,15 @@ extension String {
     func imageURL(from quizName: String) -> URL {
         let imagesURL = home.appendingPathComponent("\(GAME_DATA_PATH)/\(quizName)/\(IMAGES_FOLDER)")
         
-        if !fileManager.fileExists(atPath: imagesURL.path) {
-            fatalError("Images folder not found")
-        }
+//        if !fileManager.fileExists(atPath: imagesURL.path) {
+//            fatalError("Images folder not found")
+//        }
         
         let imageURL = imagesURL.appendingPathComponent("\(self).jpg".replacingOccurrences(of: " ", with: "-"))
                                 
-        if !fileManager.fileExists(atPath: imageURL.path) {
-            fatalError("\(imageURL.lastPathComponent) not found")
-        }
+//        if !fileManager.fileExists(atPath: imageURL.path) {
+//            fatalError("\(imageURL.lastPathComponent) not found")
+//        }
         
         return imageURL
     }
