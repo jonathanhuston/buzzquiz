@@ -49,12 +49,12 @@ extension ResultView: View {
                 }
                 .padding()
             }
+            .padding()
             
             if showingAnswers {
                 ShowAnswersView(showingAnswers: $showingAnswers)
             }
         }
-        .animation(.easeInOut)
     }
 }
 
