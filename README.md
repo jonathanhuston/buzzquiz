@@ -2,7 +2,7 @@
 
 SwiftUI app for running simple multiple-choice quizzes
 
-Quiz data stored in:
+Store quiz data in:
 
 - ~/Buzzquiz/QUIZNAME/characters.xlsx
 
